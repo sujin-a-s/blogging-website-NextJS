@@ -15,63 +15,65 @@ const Spinner = () => (
     </div>
 )
 
-export default function Signup(){
 
-    const[user,setUser] = useState<SignupInputs>({
-        username : "",
-        email : "",
-        password : ""
-    })
+export default function Signup() {
+    const [user, setUser] = useState({
+        username: "",
+        email: "",
+        password: ""
+    });
+
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
 
-    const[loading,setLoading] = useState(false)
-    const router = useRouter()
+    const onSignin = async () => {
+        try {
+            setLoading(true);
 
-    const onSignin = async() =>{
-        try{
-            setLoading(true)
-            const response = await axios.post("/api/user/signup",user)
-            console.log(response)
-            if(response.data.status==200){
-            toast.success("Sign up successful")
-            toast.success("redirecting to login page")
-            router.push("/login")
-           }else{
-            toast.error(response.data.message)
-           }
-        }catch(error : any){
-            toast.error(error.message)
-        }finally{
-            setLoading(false)
+            const response = await axios.post("/api/user/signup", user);
+            console.log(response);
+            if (response.data.status === 200) {
+                toast.success("Sign up successful");
+                toast.success("redirecting to login page");
+                router.push("/login");
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error : any) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
-        <div className="bg-gray-200 rounded-md p-10">
-            <div className="mb-3 text-center">{loading?<div className="items-center"><Spinner/></div>:"Sign Up"}</div>
-    
-            <div className="flex flex-col">
-                <label>username</label>
-                <input onChange={(e)=>setUser({...user,username : e.target.value})} className="bg-slate-100 p-1 border border-black mb-3" type="text" placeholder="username"></input>
-            </div>
-            <div className="flex flex-col">
-                <label>email</label>
-                <input onChange={(e)=>setUser({...user,email : e.target.value})} className="bg-slate-100 p-1 border border-black mb-3"  type="text" placeholder="email"></input>
-            </div>
-            <div className="flex flex-col">
-                <label>password</label>
-                <input onChange={(e)=>setUser({...user,password : e.target.value})} className="bg-slate-100 p-1 border border-black mb-3" type="text" placeholder="password"></input>
-            </div>
-            <div className=" mt-3 flex justify-center">
-            <button onClick={onSignin} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Sign Up</button>
-            </div>
-            <div className=" mt-3 flex justify-center">
-                <Link href="/login">Go to login page</Link>
-            
+            <div className="bg-gray-200 rounded-md p-10">
+                <div className="mb-3 text-center">{loading ? <div className="items-center"><Spinner /></div> : "Sign Up"}</div>
+
+                <div className="flex flex-col">
+                    <label>username</label>
+                    <input onChange={(e) => setUser({ ...user, username: e.target.value })} className="bg-slate-100 p-1 border border-black mb-3" type="text" placeholder="username"></input>
+                </div>
+                <div className="flex flex-col">
+                    <label>email</label>
+                    <input onChange={(e) => {
+                        setUser({ ...user, email: e.target.value });
+                        
+                    }} className="bg-slate-100 p-1 border border-black mb-3" type="text" placeholder="email"></input>
+                </div>
+                <div className="flex flex-col">
+                    <label>password</label>
+                    <input onChange={(e) => setUser({ ...user, password: e.target.value })} className="bg-slate-100 p-1 border border-black mb-3" type="text" placeholder="password"></input>
+                </div>
+                <div className=" mt-3 flex justify-center">
+                    <button onClick={onSignin} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Sign Up</button>
+                </div>
+                <div className=" mt-3 flex justify-center">
+                    <Link href="/login">Go to login page</Link>
+                </div>
             </div>
         </div>
-
-    </div>
-    )
+    );
 }
